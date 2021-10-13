@@ -1,5 +1,5 @@
 import requests
-
+from datetime import datetime
 
 class VK:
     """
@@ -25,8 +25,16 @@ class VK:
             'v': '5.131'
 
         }
-        dict_res = self._strip_excess(requests.get(url, params=params).json()['response']['items'])
-        print('Got VK profile photos\n')
+        response = requests.get(url=url, params=params).json()
+        amount = response['response']['count']
+        print(f'Получено {amount} фотографий (профиль) пользователя ВКонтакте\n')
+        while True:
+            cmd_param = int(input('Сколько фотографий нужно загрузить? '))
+            if cmd_param <= 0 or cmd_param > amount:
+                print('Некорректное количество, введите снова')
+            else:
+                break
+        dict_res = self._strip_excess(response['response']['items'], cmd_param)
         return dict_res
 
     def get_photos_wall(self, vk_id):
@@ -46,11 +54,19 @@ class VK:
             'v': '5.131'
 
         }
-        dict_res = self._strip_excess(requests.get(url, params=params).json()['response']['items'])
-        print('Got VK wall photos\n')
+        response = requests.get(url=url, params=params).json()
+        amount = response['response']['count']
+        print(f'Получено {amount} фотографий (стена) пользователя ВКонтакте\n')
+        while True:
+            cmd_param = int(input('Сколько фотографий нужно загрузить? '))
+            if cmd_param <= 0 or cmd_param > amount:
+                print('Некорректное количество, введите снова')
+            else:
+                break
+        dict_res = self._strip_excess(response['response']['items'], cmd_param)
         return dict_res
 
-    def _strip_excess(self, dict_to_sort):
+    def _strip_excess(self, dict_to_sort, count):
         """
         This strips excess info from response
 
@@ -63,4 +79,6 @@ class VK:
             temp_dict['photo'] = values['sizes'][-1]['type'], values['sizes'][-1]['url']
             temp_dict['likes'] = values['likes']['count']
             result[pos] = temp_dict
+            if pos >= (count - 1):
+                break
         return result
