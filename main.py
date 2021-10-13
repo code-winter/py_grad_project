@@ -6,13 +6,9 @@ from datetime import datetime
 def main():
     token_yandex = ''
     vkont = VK()
-    likes_and_url = vkont.get_photos_profile('552934290')
+    likes_and_url = vkont.get_photos('1', 'profile')
     yand = Yandex(token_yandex)
     yand.upload_urls(likes_and_url)
-
-
-
-
 
 
 if __name__ == '__main__':
