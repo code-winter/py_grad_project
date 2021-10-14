@@ -54,6 +54,7 @@ class VK:
         result = dict()
         for pos, values in enumerate(dict_to_sort):
             temp_dict = dict()
+            temp_dict['date'] = values['date']
             temp_dict['photo'] = values['sizes'][-1]['type'], values['sizes'][-1]['url']
             temp_dict['likes'] = values['likes']['count']
             result[pos] = temp_dict

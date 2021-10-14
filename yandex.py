@@ -47,25 +47,29 @@ class Yandex:
 
     def upload_urls(self, info_dict):
         with open('file_data.json', 'w') as file:
+            counter = 1
+            data = dict()
             for items, content in info_dict.items():
                 yan_path = str()
                 vk_url = str()
                 filename = str(content['likes']) + '.jpg'
                 yan_path = self.directory + filename
                 vk_url = content['photo'][-1]
+                date = content['date']                # this sets photo's date from metadata
                 is_exist = self.check_photo(yan_path)
                 if is_exist is False:
                     response = self.upload_to_disk(yan_path, vk_url)
                     if response.status_code == 202:
                         print(f'Файл {filename} загружен на Яндекс.Диск\n')
                 elif is_exist is True:
-                    date = str(datetime.now())
-                    date = date.replace(':', '_')
+                    # date = str(datetime.now())       //this sets current system date
+                    # date = date.replace(':', '_')
                     filename = f'{content["likes"]}__{date}.jpg'
                     yan_path = self.directory + filename
                     response = self.upload_to_disk(yan_path, vk_url)
                     if response.status_code == 202:
                         print(f'Файл {filename} загружен на Яндекс.Диск\n')
-                data = {'filename': filename, 'size': content['photo'][0]}
-                json.dump(data, file, indent=4)
+                data[counter] = {'filename': filename, 'size': content['photo'][0]}
+                counter += 1
+            json.dump(data, file, indent=4)
 
