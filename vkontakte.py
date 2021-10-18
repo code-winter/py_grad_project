@@ -1,5 +1,26 @@
 import requests
-from datetime import datetime
+from urllib import request
+import os
+
+
+def _strip_excess(dict_to_sort, count):
+    """
+    This strips excess info from response (leaves URI of photo, likes and size)
+
+    :param dict_to_sort:
+    :return: dict with likes and photo's URI
+    """
+    result = dict()
+    for pos, values in enumerate(dict_to_sort):
+        temp_dict = dict()
+        temp_dict['date'] = values['date']
+        temp_dict['photo'] = values['sizes'][-1]['type'], values['sizes'][-1]['url']
+        temp_dict['likes'] = values['likes']['count']
+        result[pos] = temp_dict
+        if pos >= (count - 1):
+            break
+    return result
+
 
 class VK:
     """
@@ -41,23 +62,5 @@ class VK:
                 print('Некорректное количество, введите снова')
             else:
                 break
-        dict_res = self._strip_excess(response['response']['items'], cmd_param)
+        dict_res = _strip_excess(response['response']['items'], cmd_param)
         return dict_res
-
-    def _strip_excess(self, dict_to_sort, count):
-        """
-        This strips excess info from response (leaves URI of photo, likes and size)
-
-        :param dict_to_sort:
-        :return: dict with likes and photo's URI
-        """
-        result = dict()
-        for pos, values in enumerate(dict_to_sort):
-            temp_dict = dict()
-            temp_dict['date'] = values['date']
-            temp_dict['photo'] = values['sizes'][-1]['type'], values['sizes'][-1]['url']
-            temp_dict['likes'] = values['likes']['count']
-            result[pos] = temp_dict
-            if pos >= (count - 1):
-                break
-        return result

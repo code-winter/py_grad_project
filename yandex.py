@@ -2,6 +2,7 @@ import requests
 import json
 from datetime import datetime
 
+
 class Yandex:
     """
     Class for working with Yandex API
@@ -46,7 +47,7 @@ class Yandex:
         return response
 
     def upload_urls(self, info_dict):
-        with open('file_data.json', 'w') as file:
+        with open('filedata_yandex.json', 'w') as file:
             counter = 1
             data = dict()
             for items, content in info_dict.items():
