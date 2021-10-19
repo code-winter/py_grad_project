@@ -10,11 +10,11 @@ def main():
     vkont = VK()
     vk_photo = dict()
     inst_photo = dict()
-    vk_id = '552934290'
+    vk_id = ' '
     drive = GDrive()
     yand = Yandex(token_yandex)
     inst = Instagram()
-    inst_id = '4692658730765898'
+    inst_id = ' '
     while True:
         command = int(input('Откуда необходимо получить фотографии? 1 - ВКонтакте, 2 - Instagram\n'))
         if command < 1 or command > 2:
