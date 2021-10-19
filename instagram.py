@@ -1,12 +1,22 @@
 import requests
-from pprint import pprint
+
 
 class Instagram:
+    """
+    Class for working with Instagram API
+    """
     TOKEN = f'IGQVJXYjBIcktQeG9nWDNqb1Bubm02Q1VnWC1ieTBWTjAxMVFoeW5rcjN1R1VzdEdqNGd5cjkwTXhwczNiNlQtYTFDQUpJOEFJMU' \
             f'9NMnMzQkVrc0w4eWVzOW9MSWxueVF6eUZAhc1VkN1pUV1otNUE0QgZDZD'
     media_url = 'https://graph.instagram.com/v12.0/'
 
     def write_data(self, photo_data, photo_count):
+        """
+        Writes needed metadata for further upload from response
+
+        :param photo_data: dict with media response from server
+        :param photo_count: amount of photos to upload
+        :return: dict with filled metadata
+        """
         res_dict = dict()
         count = 0
         for photo in photo_data:
@@ -22,6 +32,12 @@ class Instagram:
         return res_dict
 
     def get_photos(self, user_id):
+        """
+        This gets a list of photos from open Instagram account
+
+        :param user_id: Instagram user ID
+        :return: dict with URL and file metadata
+        """
         res_dict = dict()
         count = 0
         token = self.TOKEN
@@ -41,6 +57,6 @@ class Instagram:
             else:
                 break
         photo_data = self.write_data(temp_dict, cmd)
-        print(f'Получено: {cmd} фото Instagram')
+        print(f'Получено: {cmd} фото Instagram\n')
         return photo_data
 

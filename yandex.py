@@ -19,6 +19,12 @@ class Yandex:
         }
 
     def check_photo(self, path):
+        """
+        Checks if photo with specified name exists on remote folder
+
+        :param path: file URL to check
+        :return: boolean True (if exists) of False (if doesn't exists)
+        """
         url = 'https://cloud-api.yandex.net/v1/disk/resources'
         headers = self._get_headers()
         params = {'path': path}
@@ -30,10 +36,10 @@ class Yandex:
 
     def upload_to_disk(self, remote_file_path, ext_url):
         """
-
+        This sends a POST request to a remote folder
         :param remote_file_path: path to a remote folder
         :param ext_url: external URL to upload
-        :return:
+        :return: response from server
         """
         url = 'https://cloud-api.yandex.net/v1/disk/resources/upload'
         headers = self._get_headers()
@@ -43,10 +49,10 @@ class Yandex:
             "overwrite": "true"
         }
         response = requests.post(url=url, headers=headers, params=params)
-        print(f'Response code: {response.status_code}')
         return response
 
-    def upload_urls(self, info_dict):
+    def upload_urls_vk(self, info_dict):
+        print('Начинаю загрузку на Яндекс.Диск...')
         with open('filedata_yandex.json', 'w') as file:
             counter = 1
             data = dict()
@@ -61,7 +67,7 @@ class Yandex:
                 if is_exist is False:
                     response = self.upload_to_disk(yan_path, vk_url)
                     if response.status_code == 202:
-                        print(f'Файл {filename} загружен на Яндекс.Диск\n')
+                        print(f'Файл {filename} загружен на Яндекс.Диск в папку {self.directory.replace("/", "")}\n')
                 elif is_exist is True:
                     # date = str(datetime.now())       //this sets current system date
                     # date = date.replace(':', '_')
@@ -69,8 +75,28 @@ class Yandex:
                     yan_path = self.directory + filename
                     response = self.upload_to_disk(yan_path, vk_url)
                     if response.status_code == 202:
-                        print(f'Файл {filename} загружен на Яндекс.Диск\n')
+                        print(f'Файл {filename} загружен на Яндекс.Диск')
                 data[counter] = {'filename': filename, 'size': content['photo'][0]}
                 counter += 1
             json.dump(data, file, indent=4)
+            print('Загрузка на Яндекс.Диск завершена.')
+
+    def upload_urls_inst(self, info_dict):
+        print('Начинаю загрузку на Яндекс.Диск...')
+        with open('filedata_yandex.json', 'w') as file:
+            counter = 1
+            data = dict()
+            for items, content in info_dict.items():
+                yan_path = str()
+                inst_url = str()
+                filename = str(content['date']) + '.jpg'
+                yan_path = self.directory + filename
+                inst_url = content['photo'][-1]
+                response = self.upload_to_disk(yan_path, inst_url)
+                if response.status_code == 202:
+                    print(f'Файл {filename} загружен на Яндекс.Диск в папку {self.directory.replace("/", "")}\n')
+                data[counter] = {'filename': filename, 'size': content['photo'][0]}
+                counter += 1
+            json.dump(data, file, indent=4)
+            print('Загрузка на Яндекс.Диск завершена.')
 

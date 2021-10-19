@@ -55,12 +55,13 @@ class VK:
 
         response = requests.get(url=url, params=params).json()
         amount = response['response']['count']
-        print(f'Получено {amount} фотографий ({album_name}) пользователя ВКонтакте\n')
+        print(f'\nПолучено {amount} фотографий ({album_name}) пользователя ВКонтакте\n')
         while True:
-            cmd_param = int(input('Сколько фотографий нужно загрузить? '))
+            cmd_param = int(input(f'Сколько фотографий нужно загрузить? (1-{amount}) '))
             if cmd_param <= 0 or cmd_param > amount:
                 print('Некорректное количество, введите снова')
             else:
                 break
         dict_res = _strip_excess(response['response']['items'], cmd_param)
+        print(f'Получено: {cmd_param} фото Вконтакте\n')
         return dict_res
