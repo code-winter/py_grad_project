@@ -5,8 +5,7 @@ class Instagram:
     """
     Class for working with Instagram API
     """
-    TOKEN = f'IGQVJXYjBIcktQeG9nWDNqb1Bubm02Q1VnWC1ieTBWTjAxMVFoeW5rcjN1R1VzdEdqNGd5cjkwTXhwczNiNlQtYTFDQUpJOEFJMU' \
-            f'9NMnMzQkVrc0w4eWVzOW9MSWxueVF6eUZAhc1VkN1pUV1otNUE0QgZDZD'
+    TOKEN = ' '
     media_url = 'https://graph.instagram.com/v12.0/'
 
     def write_data(self, photo_data, photo_count):
